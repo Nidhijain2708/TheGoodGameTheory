@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [quote,setQuote]=useState(''); // let's maintain the state because we want to change the value in the div
+
+  async function changeQuote(){
+    await fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes')
+      .then(async (res)=>{
+        const data=await res.json();
+        // console.log(data[0]); // To check where the data is
+        setQuote(data[0]); // set the quote using useState
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='AppComp'>
+      <h1>Random Quotes</h1>
+      <button onClick={changeQuote}>Show Quote</button>
+      <div className='showQuote'>{quote}</div>
     </div>
-  );
+  )
 }
 
 export default App;
